@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Key Ideas Tour</title>
+<style>
+/* Layout: one narrow reading column; each idea is a section with talk track left, live plot below. */
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --fg:#1b2230; --muted:#5b6578; --rule:#d9dee7;
+  --accent:#2453c9; --accent2:#c2410c; --good:#15803d; --hl:#fff4c2;
+  --font-body: "Source Serif 4", Georgia, serif; --font-ui: system-ui, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){ :root{
+  --bg:#11151c; --panel:#181e28; --fg:#e6e9ef; --muted:#9aa4b6; --rule:#2c3442;
+  --accent:#7aa2ff; --accent2:#ff9a5c; --good:#4ade80; --hl:#3a3413; color-scheme:dark } }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.6 var(--font-body)}
+.wrap{max-width:760px;margin:0 auto;padding:24px 16px 120px}
+h1{font:600 1.9rem/1.2 var(--font-ui);margin:0 0 .3rem;text-wrap:balance}
+.sub{color:var(--muted);font-family:var(--font-ui);font-size:.95rem;margin:0 0 1.5rem}
+section{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:18px 20px;margin:0 0 18px}
+section.current{border-color:var(--accent)}
+h2{font:600 1.2rem/1.3 var(--font-ui);margin:0 0 .6rem}
+h2 .n{color:var(--accent);font-variant-numeric:tabular-nums;margin-right:.4em}
+p.say{margin:.5rem 0;padding:2px 6px;border-radius:4px;transition:background .2s}
+p.say.speaking{background:var(--hl)}
+canvas{width:100%;height:260px;display:block;margin:.8rem 0 .3rem;background:var(--bg);border-radius:6px}
+.cap{font:13px/1.4 var(--font-ui);color:var(--muted)}
+.ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font:14px var(--font-ui);margin-top:.4rem}
+.ctl input[type=range]{flex:1;min-width:160px}
+.key{font:13px var(--font-ui);display:flex;gap:14px;flex-wrap:wrap;color:var(--muted)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:middle}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--panel);border-top:1px solid var(--rule);
+  padding:10px 16px;display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;font:14px var(--font-ui)}
+button{font:600 14px var(--font-ui);padding:8px 14px;border-radius:8px;border:1px solid var(--rule);
+  background:var(--bg);color:var(--fg);cursor:pointer}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.status{color:var(--muted);min-width:9em}
+math{font-size:1.08em}
+table{border-collapse:collapse;font:14px var(--font-ui);width:100%}
+td,th{border-bottom:1px solid var(--rule);padding:6px 8px;text-align:left;font-variant-numeric:tabular-nums}
+.warn{color:var(--accent2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Key ideas of the claimed proof</h1>
+<p class="sub">A narrated tour with live experiments. Press <b>Play narration</b> below; each paragraph is read aloud and highlighted. The proof itself is still being checked: nothing here says it is correct.</p>
+
+<section id="s0">
+<h2><span class="n">0</span>The question</h2>
+<p class="say" data-say="The Riemann Hypothesis is a statement about the zeros of the zeta function, but there is an equivalent statement about primes, and that is the one this tour uses. Count the primes up to y, each weighted by its logarithm. The answer is roughly y. The Riemann Hypothesis says the error is never much bigger than the square root of y.">The Riemann Hypothesis is a statement about the zeros of the zeta function, but there is an equivalent statement about primes, and that is the one this tour uses. Count the primes up to <math><mi>y</mi></math>, each weighted by its logarithm. The answer is roughly <math><mi>y</mi></math>. The Riemann Hypothesis says the error is never much bigger than <math><msqrt><mi>y</mi></msqrt></math>.</p>
+<p class="say" data-say="The generalised version says the same for primes in arithmetic progressions, which is measured by Dirichlet characters. So everything in this tour is about one thing: showing that certain sums over primes have only square-root sized errors.">The generalised version says the same for primes in arithmetic progressions, which is measured by Dirichlet characters. So everything in this tour is about one thing: showing that certain sums over primes have only square-root sized errors.</p>
+</section>
+
+<section id="s1">
+<h2><span class="n">1</span>Square-root cancellation</h2>
+<p class="say" data-say="Here is the error for real primes. The blue curve is the prime count minus y. The orange curve is the same sum twisted by the character modulo four, which counts primes that are one mod four as plus and three mod four as minus. The grey lines are plus and minus the square root of y.">Here is the error for real primes. The blue curve is the prime count minus <math><mi>y</mi></math>. The orange curve is the same sum twisted by the character modulo <math><mn>4</mn></math>, which counts primes <math><mi>p</mi><mo>&#x2261;</mo><mn>1</mn></math> (mod <math><mn>4</mn></math>) as plus and <math><mi>p</mi><mo>&#x2261;</mo><mn>3</mn></math> (mod <math><mn>4</mn></math>) as minus. The grey lines are <math><mo>&#xB1;</mo><msqrt><mi>y</mi></msqrt></math>.</p>
+<p class="say" data-say="Both errors stay inside the square-root band. That is what the Riemann Hypothesis predicts. A computer can show it up to any height we like, but no finite computation proves it. A proof has to explain why the cancellation happens.">Both errors stay inside the square-root band. That is what the Riemann Hypothesis predicts. A computer can show it up to any height we like, but no finite computation proves it. A proof has to explain why the cancellation happens.</p>
+<canvas id="c1"></canvas>
+<div class="key"><span><i class="sw" style="background:var(--accent)"></i><math><mi>&#x3C8;</mi><mo>(</mo><mi>y</mi><mo>)</mo><mo>&#x2212;</mo><mi>y</mi></math></span><span><i class="sw" style="background:var(--accent2)"></i><math><mi>&#x3C8;</mi><mo>(</mo><mi>y</mi><mo>,</mo><msub><mi>&#x3C7;</mi><mn>4</mn></msub><mo>)</mo></math></span><span><i class="sw" style="background:var(--muted)"></i><math><mo>&#xB1;</mo><msqrt><mi>y</mi></msqrt></math></span></div>
+</section>
+
+<section id="s2">
+<h2><span class="n">2</span>The model: curves over finite fields</h2>
+<p class="say" data-say="There is one setting where the analogue of the Riemann Hypothesis is a theorem: curves over finite fields. Take the elliptic curve y squared equals x cubed minus x, and count its points modulo a prime p. The count is p plus one, minus an error a sub p. Hasse proved that the error is at most two times the square root of p.">There is one setting where the analogue of the Riemann Hypothesis is a theorem: curves over finite fields. Take the elliptic curve <math><msup><mi>y</mi><mn>2</mn></msup><mo>=</mo><msup><mi>x</mi><mn>3</mn></msup><mo>&#x2212;</mo><mi>x</mi></math>, and count its points modulo a prime <math><mi>p</mi></math>. The count is <math><mi>p</mi><mo>+</mo><mn>1</mn><mo>&#x2212;</mo><msub><mi>a</mi><mi>p</mi></msub></math>, with an error <math><msub><mi>a</mi><mi>p</mi></msub></math>. Hasse proved that <math><mo>|</mo><msub><mi>a</mi><mi>p</mi></msub><mo>|</mo><mo>&#x2264;</mo><mn>2</mn><msqrt><mi>p</mi></msqrt></math>.</p>
+<p class="say" data-say="The plot shows a sub p for every prime up to three thousand, between the curves plus and minus two root p. Look at the primes that are three mod four, drawn in orange: their error is exactly zero. These are the primes that are inert in the Gaussian integers, where the curve is supersingular. Remember them. Inert primes come back as the source of the whole method.">The plot shows <math><msub><mi>a</mi><mi>p</mi></msub></math> for every prime <math><mi>p</mi><mo>&#x2264;</mo><mn>3000</mn></math>, between the curves <math><mo>&#xB1;</mo><mn>2</mn><msqrt><mi>p</mi></msqrt></math>. Look at the primes <math><mi>p</mi><mo>&#x2261;</mo><mn>3</mn></math> (mod <math><mn>4</mn></math>), drawn in orange: their error is exactly <math><mn>0</mn></math>. These are the primes that are inert in the Gaussian integers, where the curve is supersingular. Remember them. Inert primes come back as the source of the whole method.</p>
+<canvas id="c2"></canvas>
+<div class="key"><span><i class="sw" style="background:var(--accent)"></i><math><mi>p</mi><mo>&#x2261;</mo><mn>1</mn></math> (mod <math><mn>4</mn></math>): split</span><span><i class="sw" style="background:var(--accent2)"></i><math><mi>p</mi><mo>&#x2261;</mo><mn>3</mn></math> (mod <math><mn>4</mn></math>): inert, always <math><mn>0</mn></math></span></div>
+</section>
+
+<section id="s3">
+<h2><span class="n">3</span>Stepanov's idea: vanish to high order</h2>
+<p class="say" data-say="In nineteen sixty nine Stepanov found an elementary proof of the finite field case. Build an auxiliary polynomial that vanishes at every point of the curve, not just once, but to order M. A polynomial cannot have more zeros, counted with multiplicity, than its degree. So M times the number of points is at most the degree.">In 1969 Stepanov found an elementary proof of the finite field case. Build an auxiliary polynomial that vanishes at every point of the curve, not just once, but to order <math><mi>M</mi></math>. A polynomial cannot have more zeros, counted with multiplicity, than its degree. So <math><mi>M</mi><mo>&#xD7;</mo><mo>(</mo><mtext>number of points</mtext><mo>)</mo><mo>&#x2264;</mo><mtext>degree</mtext></math>.</p>
+<p class="say" data-say="Making the polynomial vanish to higher order costs degree. The bound comes out as roughly q over M plus M: the first term shrinks as M grows, the second term grows.">Making the polynomial vanish to higher order costs degree. The bound comes out as roughly <math><mfrac><mi>q</mi><mi>M</mi></mfrac><mo>+</mo><mi>M</mi></math>: the first term shrinks as <math><mi>M</mi></math> grows, the second term grows.</p>
+<p class="say" data-say="On the chart, the horizontal axis is the vanishing order M and the vertical axis is the size of the bound, both on a log scale. At the left, with M small, the curve sits on the grey line: no better than the trivial bound q. At the right, the cost of vanishing takes over and the curve climbs again. In between it dips to the green line, at M equal to the square root of q, where the bound is about two root q. That dip is the Riemann Hypothesis for the curve. Move the slider to try other sizes of q: the dip is always at the square root.">On the chart, the horizontal axis is the vanishing order <math><mi>M</mi></math> and the vertical axis is the size of the bound, both on a log scale. At the left, with <math><mi>M</mi></math> small, the curve sits on the grey line: no better than the trivial bound <math><mi>q</mi></math>. At the right, the cost of vanishing takes over and the curve climbs again. In between it dips to the green line, at <math><mi>M</mi><mo>=</mo><msqrt><mi>q</mi></msqrt></math>, where the bound is about <math><mn>2</mn><msqrt><mi>q</mi></msqrt></math>. That dip is the Riemann Hypothesis for the curve. Move the slider to try other sizes of <math><mi>q</mi></math>: the dip is always at the square root.</p>
+<canvas id="c3"></canvas>
+<div class="ctl"><label for="q3"><math><mi>q</mi><mo>=</mo></math></label><input id="q3" type="range" min="2" max="12" step="0.1" value="6"><span id="q3v" class="status"></span></div>
+</section>
+
+<section id="s4">
+<h2><span class="n">4</span>From curves to the integers: Frobenius classes</h2>
+<p class="say" data-say="Over the integers there are no points to count. The claimed proof replaces points over larger and larger fields with primes sorted into classes, called Frobenius classes, of a large abelian number field. The simplest example is sorting odd primes by their residue modulo sixteen.">Over the integers there are no points to count. The claimed proof replaces points over larger and larger fields with primes sorted into classes, called Frobenius classes, of a large abelian number field. The simplest example is sorting odd primes by their residue modulo <math><mn>16</mn></math>.</p>
+<p class="say" data-say="The bars show, for each class, how far its prime count is from the average. The deviations are small, about the square root of the total. The proof needs only upper bounds for these classes, and only for the inert ones, drawn in orange. A positivity argument on the finite group of classes turns upper bounds into two-sided bounds, the same way it does for curves.">The bars show, for each class, how far its prime count is from the average. The deviations are small, about the square root of the total. The proof needs only upper bounds for these classes, and only for the inert ones, drawn in orange. A positivity argument on the finite group of classes turns upper bounds into two-sided bounds, the same way it does for curves.</p>
+<canvas id="c4"></canvas>
+<div class="key"><span><i class="sw" style="background:var(--accent)"></i>split classes</span><span><i class="sw" style="background:var(--accent2)"></i>inert classes (<math><mo>&#x2261;</mo><mn>3</mn></math> mod <math><mn>4</mn></math>)</span></div>
+</section>
+
+<section id="s5">
+<h2><span class="n">5</span>Where multiplicity comes from: divisibility</h2>
+<p class="say" data-say="Stepanov needed vanishing to high order. Over the integers the analogue is divisibility by many primes. The claimed proof gets it from elliptic functions with complex multiplication. Take the lemniscatic sine and its n-th derivative at zero. At an inert prime p, that number is divisible by a high power of p, growing in proportion to n.">Stepanov needed vanishing to high order. Over the integers the analogue is divisibility by many primes. The claimed proof gets it from elliptic functions with complex multiplication. Take the lemniscatic sine and its <math><mi>n</mi></math>-th derivative at <math><mn>0</mn></math>. At an inert prime <math><mi>p</mi></math>, that number is divisible by a high power of <math><mi>p</mi></math>, growing in proportion to <math><mi>n</mi></math>.</p>
+<p class="say" data-say="On the chart, the horizontal axis is n, which derivative we take. The vertical axis is how many times the prime divides the resulting number. The orange line is the exact power of three, computed for every n up to two thousand. It climbs in a straight line, about three eighths of n. So the more derivatives we take, the more divisible the number becomes, in proportion. That proportional growth is the integer version of vanishing to high order.">On the chart, the horizontal axis is <math><mi>n</mi></math>, which derivative we take. The vertical axis is how many times the prime divides the resulting number. The orange line is the exact power of <math><mn>3</mn></math>, computed for every <math><mi>n</mi><mo>&#x2264;</mo><mn>2000</mn></math>. It climbs in a straight line, about <math><mfrac><mn>3</mn><mn>8</mn></mfrac><mi>n</mi></math>. So the more derivatives we take, the more divisible the number becomes, in proportion. That proportional growth is the integer version of vanishing to high order.</p>
+<p class="say" data-say="The thick grey line under it is the prediction: n over three, plus n over twenty seven, plus n over two hundred and forty three, using only the odd powers of three. The orange line sits on it. The dashed line above is the power of three in n factorial, which uses all the powers. So about three quarters of the factorial's divisibility survives. The blue line, for the split prime five, stays at zero. That is why inert primes matter: their formal group has height two, and that is what makes the divisibility grow.">The thick grey line under it is the prediction <math><mrow><mo>&#x230A;</mo><mfrac><mi>n</mi><mn>3</mn></mfrac><mo>&#x230B;</mo></mrow><mo>+</mo><mrow><mo>&#x230A;</mo><mfrac><mi>n</mi><mn>27</mn></mfrac><mo>&#x230B;</mo></mrow><mo>+</mo><mrow><mo>&#x230A;</mo><mfrac><mi>n</mi><mn>243</mn></mfrac><mo>&#x230B;</mo></mrow><mo>+</mo><mo>&#x22EF;</mo></math>, using only the odd powers of <math><mn>3</mn></math>. The orange line sits on it. The dashed line above is the power of <math><mn>3</mn></math> in <math><mi>n</mi><mo>!</mo></math>, which uses all the powers. So about <math><mfrac><mn>3</mn><mn>4</mn></mfrac></math> of the factorial's divisibility survives. The blue line, for the split prime <math><mn>5</mn></math>, stays at <math><mn>0</mn></math>. That is why inert primes matter: their formal group has height <math><mn>2</mn></math>, and that is what makes the divisibility grow.</p>
+<canvas id="c5"></canvas>
+<div class="key"><span><i class="sw" style="background:var(--accent2)"></i>power of <math><mn>3</mn></math> (inert)</span><span><i class="sw" style="background:var(--muted)"></i>odd-power prediction (thick) and power of <math><mn>3</mn></math> in <math><mi>n</mi><mo>!</mo></math> (dashed)</span><span><i class="sw" style="background:var(--accent)"></i>power of <math><mn>5</mn></math> (split)</span></div>
+</section>
+
+<section id="s6">
+<h2><span class="n">6</span>Counting divisibility against size</h2>
+<p class="say" data-say="Stepanov compared zeros with degree. The integer version compares divisibility with size, using lattices and Bost's slope inequality: a non-zero integer divisible by many primes must be large. The proof builds a chain of m theta lifts. Each lift adds divisibility, so the gain grows like m, while the cost of the chain also grows like m.">Stepanov compared zeros with degree. The integer version compares divisibility with size, using lattices and Bost's slope inequality: a non-zero integer divisible by many primes must be large. The proof builds a chain of <math><mi>m</mi></math> theta lifts. Each lift adds divisibility, so the gain grows like <math><mi>m</mi></math>, while the cost of the chain also grows like <math><mi>m</mi></math>.</p>
+<p class="say" data-say="The result is the same trade-off as in Stepanov's case, now with the size x of the primes in place of q, and the chain length m in place of the vanishing order. On the chart, the horizontal axis is m and the vertical axis is the size of the error, both on a log scale. With a chain of length one, the curve starts at the grey line: the trivial bound, about x. As the chain gets longer the error falls, until the cost of the chain takes over. The lowest point is at a chain of length about the square root of x, and there the error is close to the green line, the square root of x, up to a small power of x. That is exactly the quality the Riemann Hypothesis needs. Move the slider: however large x is, the best chain length is about its square root.">The result is the same trade-off as in Stepanov's case, now with the size <math><mi>x</mi></math> of the primes in place of <math><mi>q</mi></math>, and the chain length <math><mi>m</mi></math> in place of the vanishing order. On the chart, the horizontal axis is <math><mi>m</mi></math> and the vertical axis is the size of the error, both on a log scale. With a chain of length <math><mn>1</mn></math>, the curve starts at the grey line: the trivial bound, about <math><mi>x</mi></math>. As the chain gets longer the error falls, until the cost of the chain takes over. The lowest point is at <math><mi>m</mi><mo>&#x2248;</mo><msqrt><mi>x</mi></msqrt></math>, and there the error is close to the green line, <math><msqrt><mi>x</mi></msqrt></math>, up to a small power of <math><mi>x</mi></math>. That is exactly the quality the Riemann Hypothesis needs. Move the slider: however large <math><mi>x</mi></math> is, the best chain length is about <math><msqrt><mi>x</mi></msqrt></math>.</p>
+<canvas id="c6"></canvas>
+<div class="ctl"><label for="x6"><math><mi>x</mi><mo>=</mo></math></label><input id="x6" type="range" min="4" max="20" step="0.1" value="10"><span id="x6v" class="status"></span></div>
+</section>
+
+<section id="s7">
+<h2><span class="n">7</span>The threshold, and why it does not matter</h2>
+<p class="say" data-say="The estimates of section six do not hold for every x. They come with a condition: x must be at least two o, to the power eight over epsilon. Here o is the order of the character, and epsilon measures how close to one half we want to get. For the zeta function o is one, and epsilon must be less than one fifty-second, so the smallest the condition can ever be is two to the power eight times fifty two, which is two to the power four hundred and sixteen.">The estimates of section 6 do not hold for every <math><mi>x</mi></math>. They come with a condition: <math><mi>x</mi><mo>&#x2265;</mo><msup><mrow><mo>(</mo><mn>2</mn><mi>o</mi><mo>)</mo></mrow><mrow><mn>8</mn><mo>/</mo><mi>&#x3B5;</mi></mrow></msup></math>. Here <math><mi>o</mi></math> is the order of the character, and <math><mi>&#x3B5;</mi></math> measures how close to <math><mfrac><mn>1</mn><mn>2</mn></mfrac></math> we want to get. For the zeta function <math><mi>o</mi><mo>=</mo><mn>1</mn></math>, and <math><mi>&#x3B5;</mi><mo>&lt;</mo><mfrac><mn>1</mn><mn>52</mn></mfrac></math>, so the smallest the condition can ever be is <math><msup><mn>2</mn><mrow><mn>8</mn><mo>&#xD7;</mo><mn>52</mn></mrow></msup><mo>=</mo><msup><mn>2</mn><mn>416</mn></msup></math>.</p>
+<p class="say" data-say="Nothing about the primes changes at this point. The condition comes from one step of bookkeeping. Only a fraction, one over four o, of the Frobenius classes are inert classes that the method can use, so the proof loses a constant factor. To keep the final bound in the clean form, x to the power one half plus something small, it hides that constant inside a tiny power of x. It needs x to the power epsilon over eight to be at least two o. A tiny power of x only beats a fixed constant once x is enormous.">Nothing about the primes changes at this point. The condition comes from one step of bookkeeping. Only a fraction <math><mfrac><mn>1</mn><mrow><mn>4</mn><mi>o</mi></mrow></mfrac></math> of the Frobenius classes are inert classes that the method can use, so the proof loses a constant factor. To keep the final bound in the clean form <math><msup><mi>x</mi><mrow><mn>1</mn><mo>/</mo><mn>2</mn><mo>+</mo><mtext>small</mtext></mrow></msup></math>, it hides that constant inside a tiny power of <math><mi>x</mi></math>. It needs <math><msup><mi>x</mi><mrow><mi>&#x3B5;</mi><mo>/</mo><mn>8</mn></mrow></msup><mo>&#x2265;</mo><mn>2</mn><mi>o</mi></math>. A tiny power of <math><mi>x</mi></math> only beats a fixed constant once <math><mi>x</mi></math> is enormous.</p>
+<p class="say" data-say="The first chart shows this. The horizontal axis is the size of x, measured by its number of binary digits. The rising blue line is x to the power epsilon over eight; the flat orange line is the constant two o. The bound is certified only to the right of the crossing, in the shaded region. Move the sliders. A smaller epsilon, which means a sharper result, pushes the crossing further out, and as epsilon shrinks towards zero the threshold grows without limit. So there is no single cutoff. Each epsilon has its own.">The first chart shows this. The horizontal axis is the size of <math><mi>x</mi></math>, measured by its number of binary digits. The rising blue line is <math><msup><mi>x</mi><mrow><mi>&#x3B5;</mi><mo>/</mo><mn>8</mn></mrow></msup></math>; the flat orange line is the constant <math><mn>2</mn><mi>o</mi></math>. The bound is certified only to the right of the crossing, in the shaded region. Move the sliders. A smaller <math><mi>&#x3B5;</mi></math>, which means a sharper result, pushes the crossing further out, and as <math><mi>&#x3B5;</mi><mo>&#x2192;</mo><mn>0</mn></math> the threshold grows without limit. So there is no single cutoff. Each <math><mi>&#x3B5;</mi></math> has its own.</p>
+<canvas id="c7a"></canvas>
+<div class="ctl"><label for="eps7"><math><mi>&#x3B5;</mi><mo>=</mo></math></label><input id="eps7" type="range" min="0.002" max="0.0192" step="0.0002" value="0.0192"><span id="eps7v" class="status" style="min-width:4em"></span></div>
+<div class="ctl"><label for="o7"><math><mi>o</mi><mo>=</mo></math></label><input id="o7" type="range" min="1" max="6" step="1" value="1"><span id="o7v" class="status"></span></div>
+<p class="say" data-say="What happens below the crossing? Nothing different. The primes there behave just as well, as the numerical checks in section one show. This chain of inequalities simply does not cover them. It is like proving that n squared is at least one thousand times n. The easy argument works from n equals one thousand onwards and says nothing about smaller n, although nothing special happens at one thousand. The proof also has other thresholds, where good pairs of primes and chain data are shown to exist. Those are proved to exist but never computed, so two to the power four hundred and sixteen is only the explicit part of the true starting point.">What happens below the crossing? Nothing different. The primes there behave just as well, as the numerical checks in section 1 show. This chain of inequalities simply does not cover them. It is like proving that <math><msup><mi>n</mi><mn>2</mn></msup><mo>&#x2265;</mo><mn>1000</mn><mi>n</mi></math>. The easy argument works from <math><mi>n</mi><mo>=</mo><mn>1000</mn></math> onwards and says nothing about smaller <math><mi>n</mi></math>, although nothing special happens at <math><mn>1000</mn></math>. The proof also has other thresholds, where good pairs of primes and chain data are shown to exist. Those are proved to exist but never computed, so <math><msup><mn>2</mn><mn>416</mn></msup></math> is only the explicit part of the true starting point.</p>
+<p class="say" data-say="Why is a bound that only starts at a huge x good enough? Because a zero off the critical line cannot hide. If there were a zero with real part beta bigger than one half, the prime-count error would swing up to about y to the power beta, again and again, for arbitrarily large y. The second chart shows this. Both axes are logarithmic, so powers of y become straight lines. The orange line is the swing caused by such a zero. The green line is the proved bound, y to the power one half plus epsilon. As long as beta is bigger than one half plus epsilon, the orange line is steeper, so it eventually crosses the green line and the bound would be broken. Move the slider: the closer beta is to one half, the further out the crossing, but it always comes. If beta is inside the margin, take a smaller epsilon.">Why is a bound that only starts at a huge <math><mi>x</mi></math> good enough? Because a zero off the critical line cannot hide. If there were a zero with real part <math><mi>&#x3B2;</mi><mo>&gt;</mo><mfrac><mn>1</mn><mn>2</mn></mfrac></math>, the prime-count error would swing up to about <math><msup><mi>y</mi><mi>&#x3B2;</mi></msup></math>, again and again, for arbitrarily large <math><mi>y</mi></math>. The second chart shows this. Both axes are logarithmic, so powers of <math><mi>y</mi></math> become straight lines. The orange line is the swing caused by such a zero. The green line is the proved bound <math><msup><mi>y</mi><mrow><mn>1</mn><mo>/</mo><mn>2</mn><mo>+</mo><mi>&#x3B5;</mi></mrow></msup></math>. As long as <math><mi>&#x3B2;</mi><mo>&gt;</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>+</mo><mi>&#x3B5;</mi></math>, the orange line is steeper, so it eventually crosses the green line and the bound would be broken. Move the slider: the closer <math><mi>&#x3B2;</mi></math> is to <math><mfrac><mn>1</mn><mn>2</mn></mfrac></math>, the further out the crossing, but it always comes. If <math><mi>&#x3B2;</mi></math> is inside the margin, take a smaller <math><mi>&#x3B5;</mi></math>.</p>
+<canvas id="c7b"></canvas>
+<div class="ctl"><label for="b7"><math><mi>&#x3B2;</mi><mo>=</mo></math></label><input id="b7" type="range" min="0.505" max="0.95" step="0.005" value="0.6"><span id="b7v" class="status"></span></div>
+<div class="key"><span><i class="sw" style="background:var(--accent2)"></i>swing caused by a zero with real part <math><mi>&#x3B2;</mi></math></span><span><i class="sw" style="background:var(--good)"></i>proved bound <math><msup><mi>y</mi><mrow><mn>1</mn><mo>/</mo><mn>2</mn><mo>+</mo><mi>&#x3B5;</mi></mrow></msup></math> with <math><mi>&#x3B5;</mi><mo>=</mo><mn>0.02</mn></math></span></div>
+<p class="say" data-say="There is also a precise reason why small values cannot matter. The final step reads off the zeros from the poles of an integral, the Mellin transform of the error. Changing the error on any finite range, from one to X, changes that integral only by a function with no poles at all. So a finite range can neither create a zero nor hide one. That is why the proof can ignore small x, and also why no finite computation could ever prove the hypothesis.">There is also a precise reason why small values cannot matter. The final step reads off the zeros from the poles of an integral, the Mellin transform <math><msubsup><mo>&#x222B;</mo><mn>1</mn><mi>&#x221E;</mi></msubsup><mi>B</mi><mo>(</mo><mi>y</mi><mo>)</mo><mspace width="0.1em"></mspace><msup><mi>y</mi><mrow><mo>&#x2212;</mo><mi>s</mi><mo>&#x2212;</mo><mn>1</mn></mrow></msup><mspace width="0.2em"></mspace><mi>d</mi><mi>y</mi></math> of the error <math><mi>B</mi></math>. Changing the error on any finite range <math><mo>[</mo><mn>1</mn><mo>,</mo><mi>X</mi><mo>]</mo></math> changes that integral only by <math><msubsup><mo>&#x222B;</mo><mn>1</mn><mi>X</mi></msubsup><mo>&#x22EF;</mo></math>, a function of <math><mi>s</mi></math> with no poles at all. So a finite range can neither create a zero nor hide one. That is why the proof can ignore small <math><mi>x</mi></math>, and also why no finite computation could ever prove the hypothesis.</p>
+<p class="say" data-say="Putting this together: for every epsilon, the proof shows there are no zeros with real part above one half plus a fixed multiple of epsilon. Each epsilon has its own threshold, and none of them needs to be checked by computer. Letting epsilon shrink to zero leaves no room for any zero off the line, which is exactly the Riemann Hypothesis.">Putting this together: for every <math><mi>&#x3B5;</mi><mo>&gt;</mo><mn>0</mn></math>, the proof shows there are no zeros with real part above <math><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>+</mo><mi>c</mi><mi>&#x3B5;</mi></math> for a fixed constant <math><mi>c</mi></math>. Each <math><mi>&#x3B5;</mi></math> has its own threshold, and none of them needs to be checked by computer. Letting <math><mi>&#x3B5;</mi><mo>&#x2192;</mo><mn>0</mn></math> leaves no room for any zero off the line, which is exactly the Riemann Hypothesis.</p>
+</section>
+
+<section id="s8">
+<h2><span class="n">8</span>Putting it together, and what is still open</h2>
+<p class="say" data-say="Assemble the pieces. Upper bounds for inert Frobenius classes, plus bounds for a few auxiliary twisted characters supplied by well chosen pairs of primes, feed a positivity criterion. That criterion forces every Dirichlet L-function, and the zeta function, to have no zeros to the right of one half.">Assemble the pieces. Upper bounds for inert Frobenius classes, plus bounds for a few auxiliary twisted characters supplied by well chosen pairs of primes, feed a positivity criterion. That criterion forces every Dirichlet <math><mi>L</mi></math>-function, and the zeta function, to have no zeros to the right of the line <math><mo>Re</mo><mo>(</mo><mi>s</mi><mo>)</mo><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac></math>.</p>
+<p class="say" data-say="As section 7 showed, what has to be checked is not numbers but reasoning: that each definition means what it claims to mean, and that every step from the starting facts to the final statement really follows. The authors wrote the whole proof in Lean, a program for checking mathematics. In Lean every definition and every step of every proof is written in a precise formal language, all the way down to the rules of logic. Lean's checker, a small core program, replays each step and accepts it only if it follows exactly from what came before. Nothing is taken on trust except three standard axioms that the rest of mathematics also uses.">As section 7 showed, what has to be checked is not numbers but reasoning: that each definition means what it claims to mean, and that every step from the starting facts to the final statement really follows. The authors wrote the whole proof in Lean, a program for checking mathematics. In Lean every definition and every step of every proof is written in a precise formal language, all the way down to the rules of logic. Lean's checker, a small core program, replays each step and accepts it only if it follows exactly from what came before. Nothing is taken on trust except <math><mn>3</mn></math> standard axioms that the rest of mathematics also uses.</p>
+<p class="say" data-say="Checking the claim therefore means three things. First, compile all one hundred and seventy five thousand files: compiling is what makes Lean check every proof in them. Second, ask Lean which axioms the final theorem depends on. The answer must be only the three standard ones, with no unproved assumptions slipped in. Third, confirm that the final theorem states the real Riemann Hypothesis, using the standard definition from Mathlib, Lean's shared library of mathematics, and not a look-alike. The definition passes the third test so far. Several key stages already pass the second. The compilation is about half done, with no errors in the mathematics. Only when all three tests pass for the final theorem would the claim deserve to be taken seriously.">Checking the claim therefore means three things. First, compile all <math><mn>175,187</mn></math> files: compiling is what makes Lean check every proof in them. Second, ask Lean which axioms the final theorem depends on. The answer must be only the <math><mn>3</mn></math> standard ones, with no unproved assumptions slipped in. Third, confirm that the final theorem states the real Riemann Hypothesis, using the standard definition from Mathlib, Lean's shared library of mathematics, and not a look-alike. The definition passes the third test so far. Several key stages already pass the second. The compilation is about half done, with no errors in the mathematics. Only when all three tests pass for the final theorem would the claim deserve to be taken seriously.</p>
+<table>
+<tr><th>Quantity</th><th>Size in the argument</th></tr>
+<tr><td>Scale where the estimates start</td><td><math><mi>x</mi><mo>&#x2265;</mo><msup><mrow><mo>(</mo><mn>2</mn><mi>o</mi><mo>)</mo></mrow><mrow><mn>8</mn><mo>/</mo><mi>&#x3B5;</mi></mrow></msup></math>, at least about <math><msup><mn>2</mn><mn>416</mn></msup></math>; nothing below it needs checking</td></tr>
+<tr><td>Chain length</td><td><math><mi>m</mi><mo>&#x2248;</mo><msqrt><mi>x</mi></msqrt></math></td></tr>
+<tr><td>Auxiliary prime <math><mi>q</mi></math></td><td><math><mi>log</mi><mi>q</mi><mo>&#x2248;</mo><msup><mi>x</mi><mrow><mi>&#x3B5;</mi><mo>/</mo><mn>5</mn></mrow></msup></math>: modest at the threshold, eventually larger than any power of <math><mi>x</mi></math>; shown to exist, never computed</td></tr>
+<tr><td>Files in the formal proof</td><td><math><mn>175,187</mn></math>, about half compiled, no errors in the mathematics</td></tr>
+<tr><td>Status of the final theorem</td><td class="warn">not yet checked</td></tr>
+</table>
+</section>
+</div>
+
+<div class="bar" role="region" aria-label="Narration controls">
+<button id="play" class="primary">Play narration</button>
+<button id="prev">Previous</button>
+<button id="next">Next</button>
+<label for="voice">Voice</label><select id="voice" style="max-width:240px;font:14px system-ui;padding:6px;border-radius:6px"></select>
+<label for="rate">Speed</label><input id="rate" type="range" min="0.7" max="1.4" step="0.05" value="1" style="width:90px">
+<span id="st" class="status">Ready</span>
+</div>
+
+<script>
+const LEM = {"n":[1,5,9,13,17,21,25,29,33,37,41,45,49,53,57,61,65,69,73,77,81,85,89,93,97,101,105,109,113,117,121,125,129,133,137,141,145,149,153,157,161,165,169,173,177,181,185,189,193,197,201,205,209,213,217,221,225,229,233,237,241,245,249,253,257,261,265,269,273,277,281,285,289,293,297,301,305,309,313,317,321,325,329,333,337,341,345,349,353,357,361,365,369,373,377,381,385,389,393,397,401,405,409,413,417,421,425,429,433,437,441,445,449,453,457,461,465,469,473,477,481,485,489,493,497,501,505,509,513,517,521,525,529,533,537,541,545,549,553,557,561,565,569,573,577,581,585,589,593,597,601,605,609,613,617,621,625,629,633,637,641,645,649,653,657,661,665,669,673,677,681,685,689,693,697,701,705,709,713,717,721,725,729,733,737,741,745,749,753,757,761,765,769,773,777,781,785,789,793,797,801,805,809,813,817,821,825,829,833,837,841,845,849,853,857,861,865,869,873,877,881,885,889,893,897,901,905,909,913,917,921,925,929,933,937,941,945,949,953,957,961,965,969,973,977,981,985,989,993,997,1001,1005,1009,1013,1017,1021,1025,1029,1033,1037,1041,1045,1049,1053,1057,1061,1065,1069,1073,1077,1081,1085,1089,1093,1097,1101,1105,1109,1113,1117,1121,1125,1129,1133,1137,1141,1145,1149,1153,1157,1161,1165,1169,1173,1177,1181,1185,1189,1193,1197,1201,1205,1209,1213,1217,1221,1225,1229,1233,1237,1241,1245,1249,1253,1257,1261,1265,1269,1273,1277,1281,1285,1289,1293,1297,1301,1305,1309,1313,1317,1321,1325,1329,1333,1337,1341,1345,1349,1353,1357,1361,1365,1369,1373,1377,1381,1385,1389,1393,1397,1401,1405,1409,1413,1417,1421,1425,1429,1433,1437,1441,1445,1449,1453,1457,1461,1465,1469,1473,1477,1481,1485,1489,1493,1497,1501,1505,1509,1513,1517,1521,1525,1529,1533,1537,1541,1545,1549,1553,1557,1561,1565,1569,1573,1577,1581,1585,1589,1593,1597,1601,1605,1609,1613,1617,1621,1625,1629,1633,1637,1641,1645,1649,1653,1657,1661,1665,1669,1673,1677,1681,1685,1689,1693,1697,1701,1705,1709,1713,1717,1721,1725,1729,1733,1737,1741,1745,1749,1753,1757,1761,1765,1769,1773,1777,1781,1785,1789,1793,1797,1801,1805,1809,1813,1817,1821,1825,1829,1833,1837,1841,1845,1849,1853,1857,1861,1865,1869,1873,1877,1881,1885,1889,1893,1897,1901,1905,1909,1913,1917,1921,1925,1929,1933,1937,1941,1945,1949,1953,1957,1961,1965,1969,1973,1977,1981,1985,1989,1993,1997,2001],"v3":[0,1,3,4,6,7,10,10,12,13,15,16,19,19,21,22,24,25,29,28,30,31,33,34,37,37,39,40,42,43,46,46,48,49,51,52,56,55,57,58,60,61,64,64,66,67,69,70,73,73,75,76,78,79,84,82,84,85,87,88,91,91,93,94,96,97,100,100,102,103,105,106,110,109,111,112,114,115,118,118,120,121,123,124,127,127,129,130,132,133,137,136,138,139,141,142,145,145,147,148,150,151,154,154,156,157,159,160,165,163,165,166,168,169,172,172,174,175,177,178,181,181,183,184,186,187,191,190,192,193,195,196,199,199,201,202,204,205,208,208,210,211,213,214,218,217,219,220,222,223,226,226,228,229,231,232,235,235,237,238,240,241,247,244,246,247,249,250,253,253,255,256,258,259,262,262,264,265,267,268,272,271,273,274,276,277,280,280,282,283,285,286,289,289,291,292,294,295,299,298,300,301,303,304,307,307,309,310,312,313,316,316,318,319,321,322,327,325,327,328,330,331,334,334,336,337,339,340,343,343,345,346,348,349,353,352,354,355,357,358,361,361,363,364,366,367,370,370,372,373,375,376,380,379,381,382,384,385,388,388,390,391,393,394,397,397,399,400,402,403,408,406,408,409,411,412,415,415,417,418,420,421,424,424,426,427,429,430,434,433,435,436,438,439,442,442,444,445,447,448,451,451,453,454,456,457,461,460,462,463,465,466,469,469,471,472,474,475,478,478,480,481,483,484,490,487,489,490,492,493,496,496,498,499,501,502,505,505,507,508,510,511,515,514,516,517,519,520,523,523,525,526,528,529,532,532,534,535,537,538,542,541,543,544,546,547,550,550,552,553,555,556,559,559,561,562,564,565,570,568,570,571,573,574,577,577,579,580,582,583,586,586,588,589,591,592,596,595,597,598,600,601,604,604,606,607,609,610,613,613,615,616,618,619,623,622,624,625,627,628,631,631,633,634,636,637,640,640,642,643,645,646,651,649,651,652,654,655,658,658,660,661,663,664,667,667,669,670,672,673,677,676,678,679,681,682,685,685,687,688,690,691,694,694,696,697,699,700,704,703,705,706,708,709,712,712,714,715,717,718,721,721,723,724,726,727,734,730,732,733,735,736,739,739,741,742,744,745,748,748,750],"v7":[0,0,1,1,2,3,3,4,4,5,5,6,7,7,8,8,9,10,10,11,11,12,12,13,14,14,15,15,16,18,17,18,18,19,19,20,21,21,22,22,23,24,24,25,25,26,26,27,28,28,29,29,30,31,31,32,32,33,33,34,35,35,36,36,37,38,38,39,39,40,40,41,42,42,43,43,44,45,45,46,46,47,47,48,50,49,50,50,51,52,52,53,53,54,54,55,56,56,57,57,58,59,59,60,60,61,61,62,63,63,64,64,65,67,66,67,67,68,68,69,70,70,71,71,72,73,73,74,74,75,75,76,77,77,78,78,79,80,80,81,81,82,82,83,84,84,85,85,86,87,87,88,88,89,89,90,91,91,92,92,93,94,94,95,95,96,96,97,99,98,99,99,100,101,101,102,102,103,103,104,105,105,106,106,107,108,108,109,109,110,110,111,112,112,113,113,114,117,115,116,116,117,117,118,119,119,120,120,121,122,122,123,123,124,124,125,126,126,127,127,128,129,129,130,130,131,131,132,133,133,134,134,135,136,136,137,137,138,138,139,140,140,141,141,142,143,143,144,144,145,145,146,148,147,148,148,149,150,150,151,151,152,152,153,154,154,155,155,156,157,157,158,158,159,159,160,161,161,162,162,163,165,164,165,165,166,166,167,168,168,169,169,170,171,171,172,172,173,173,174,175,175,176,176,177,178,178,179,179,180,180,181,182,182,183,183,184,185,185,186,186,187,187,188,189,189,190,190,191,192,192,193,193,194,194,195,197,196,197,197,198,199,199,200,200,201,201,202,203,203,204,204,205,206,206,207,207,208,208,209,210,210,211,211,212,214,213,214,214,215,215,216,217,217,218,218,219,220,220,221,221,222,222,223,224,224,225,225,226,227,227,228,228,229,229,230,231,231,232,232,233,234,234,235,235,236,236,237,238,238,239,239,240,241,241,242,242,243,243,244,246,245,246,246,247,248,248,249,249,250,250,251,252,252,253,253,254,255,255,256,256,257,257,258,259,259,260,260,261,263,262,263,263,264,264,265,266,266,267,267,268,269,269,270,270,271,271,272,273,273,274,274,275,276,276,277,277,278,278,279,280,280,281,281,282,283,283,284,284,285,285,286,287,287,288,288,289,290,290,291,291],"v11":[0,0,0,2,1,1,2,2,3,3,3,4,4,4,5,5,5,6,6,7,7,7,8,8,9,9,9,9,10,10,11,11,11,13,12,12,13,13,14,14,14,15,15,15,16,16,16,17,17,18,18,18,19,19,20,20,20,20,21,21,22,22,22,24,23,23,24,24,25,25,25,26,26,26,27,27,27,28,28,29,29,29,30,30,31,31,31,31,32,32,33,33,33,35,34,34,35,35,36,36,36,37,37,37,38,38,38,39,39,40,40,40,41,41,42,42,42,42,43,43,44,44,44,46,45,45,46,46,47,47,47,48,48,48,49,49,49,50,50,52,51,51,52,52,54,53,53,53,54,54,55,55,55,57,56,56,57,57,58,58,58,59,59,59,60,60,60,61,61,62,62,62,63,63,64,64,64,64,65,65,66,66,66,68,67,67,68,68,69,69,69,70,70,70,71,71,71,72,72,73,73,73,74,74,75,75,75,75,76,76,77,77,77,79,78,78,79,79,80,80,80,81,81,81,82,82,82,83,83,84,84,84,85,85,86,86,86,86,87,87,88,88,88,90,89,89,90,90,91,91,91,92,92,92,93,93,93,94,94,95,95,95,96,96,97,97,97,97,98,98,99,99,99,101,100,100,101,101,102,102,102,103,103,103,104,104,104,105,105,106,106,106,107,107,108,108,108,108,109,109,110,110,110,112,111,111,112,112,113,113,113,114,114,114,115,115,115,116,116,117,117,117,118,118,119,119,119,119,120,120,122,121,121,123,122,122,123,123,124,124,124,125,125,125,126,126,126,127,127,128,128,128,129,129,130,130,130,130,131,131,132,132,132,134,133,133,134,134,135,135,135,136,136,136,137,137,137,138,138,139,139,139,140,140,141,141,141,141,142,142,143,143,143,145,144,144,145,145,146,146,146,147,147,147,148,148,148,149,149,150,150,150,151,151,152,152,152,152,153,153,154,154,154,156,155,155,156,156,157,157,157,158,158,158,159,159,159,160,160,161,161,161,162,162,163,163,163,163,164,164,165,165,165,167,166,166,167,167,168,168,168,169,169,169,170,170,170,171,171,174,172,172,173,173,177,174,174,174,175,175,176,176,176,178,177,177,178,178,179,179,179,180,180,180,181,181,181,182,182,183,183],"v5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"v13":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"v17":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]};
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+// ---------- plotting helper ----------
+function setup(id){
+  const c=document.getElementById(id), r=c.getBoundingClientRect(), d=devicePixelRatio||1;
+  c.width=r.width*d; c.height=r.height*d; const g=c.getContext('2d'); g.scale(d,d);
+  return {g, W:r.width, H:r.height, L:48, R:12, T:12, B:30};
+}
+function axes(P, xmin,xmax,ymin,ymax, xlab, ylab, xfmt=v=>v, yfmt=v=>v){
+  const {g,W,H,L,R,T,B}=P; g.fillStyle=css('--bg'); g.fillRect(0,0,W,H);
+  P.X=v=>L+(v-xmin)/(xmax-xmin)*(W-L-R); P.Y=v=>H-B-(v-ymin)/(ymax-ymin)*(H-T-B);
+  g.strokeStyle=css('--rule'); g.fillStyle=css('--muted'); g.font='11px system-ui'; g.lineWidth=1;
+  for(let i=0;i<=4;i++){ const yv=ymin+(ymax-ymin)*i/4, y=P.Y(yv);
+    g.beginPath(); g.moveTo(L,y); g.lineTo(W-R,y); g.stroke(); g.textAlign='right'; g.fillText(yfmt(yv),L-4,y+4); }
+  for(let i=0;i<=4;i++){ const xv=xmin+(xmax-xmin)*i/4; g.textAlign='center'; g.fillText(xfmt(xv),P.X(xv),H-B+14); }
+  g.textAlign='center'; g.fillText(xlab,(L+W-R)/2,H-4);
+  if(ylab){ g.textAlign='left'; g.fillStyle=css('--fg'); g.fillText(ylab,L+6,T+12); }
+}
+function hline(P,yv,label,color,dash=[5,4]){ const g=P.g, y=P.Y(yv); g.strokeStyle=color; g.lineWidth=1.2; g.setLineDash(dash);
+  g.beginPath(); g.moveTo(P.L,y); g.lineTo(P.W-P.R,y); g.stroke(); g.setLineDash([]);
+  g.fillStyle=color; g.font='12px system-ui'; g.textAlign='right'; g.fillText(label,P.W-P.R-4,y-5); }
+function note(P,xv,yv,label,color,align='left'){ const g=P.g; g.fillStyle=color; g.font='600 12px system-ui'; g.textAlign=align;
+  g.fillText(label,P.X(xv)+(align==='left'?8:-8),P.Y(yv)+4); }
+function line(P,xs,ys,color,w=1.6,dash=[]){ const g=P.g; g.strokeStyle=color; g.lineWidth=w; g.setLineDash(dash);
+  g.beginPath(); xs.forEach((x,i)=>{const px=P.X(x),py=P.Y(ys[i]); i?g.lineTo(px,py):g.moveTo(px,py)}); g.stroke(); g.setLineDash([]); }
+const fmtK = v => Math.abs(v)>=1e6?(v/1e6).toFixed(1)+'M':Math.abs(v)>=1e3?(v/1e3).toFixed(0)+'k':v.toFixed(0);
+
+// ---------- primes ----------
+const NMAX=1000000; const sieve=new Uint8Array(NMAX+1).fill(1); sieve[0]=sieve[1]=0;
+for(let i=2;i*i<=NMAX;i++) if(sieve[i]) for(let j=i*i;j<=NMAX;j+=i) sieve[j]=0;
+
+// 1: psi errors
+function draw1(){
+  const P=setup('c1'), N=300000, step=750; let psi=0, psic=0; const xs=[],a=[],b=[],up=[],dn=[];
+  const lam=new Float64Array(N+1), chi=n=>n%2==0?0:(n%4==1?1:-1);
+  for(let p=2;p<=N;p++) if(sieve[p]){ const lp=Math.log(p); for(let q=p;q<=N;q*=p){ lam[q]=lp; } }
+  for(let n=1;n<=N;n++){ psi+=lam[n]; psic+=lam[n]*chi(n); if(n%step==0){ xs.push(n); a.push(psi-n); b.push(psic); up.push(Math.sqrt(n)); dn.push(-Math.sqrt(n)); } }
+  axes(P,0,N,-600,600,'y',null,fmtK,v=>v.toFixed(0));
+  line(P,xs,up,css('--muted'),1,[4,4]); line(P,xs,dn,css('--muted'),1,[4,4]);
+  line(P,xs,a,css('--accent')); line(P,xs,b,css('--accent2'));
+}
+// 2: a_p for y^2=x^3-x
+function draw2(){
+  const P=setup('c2'), PM=3000; axes(P,0,PM,-120,120,'prime p',null,fmtK,v=>v.toFixed(0));
+  const xs=[],u=[],d=[]; for(let x=5;x<=PM;x+=25){xs.push(x);u.push(2*Math.sqrt(x));d.push(-2*Math.sqrt(x));}
+  line(P,xs,u,css('--muted'),1,[4,4]); line(P,xs,d,css('--muted'),1,[4,4]);
+  for(let p=5;p<=PM;p++){ if(!sieve[p]) continue; const sq=new Int8Array(p).fill(-1); sq[0]=0;
+    for(let t=1;t<p;t++) sq[(t*t)%p]=1; let s=0; for(let x=0;x<p;x++){ s+=sq[((x*x%p)*x - x + p*p)%p]; }
+    const ap=-s; P.g.fillStyle = p%4==3?css('--accent2'):css('--accent'); P.g.beginPath(); P.g.arc(P.X(p),P.Y(ap),1.8,0,7); P.g.fill(); }
+}
+// 3: Stepanov trade-off
+function draw3(){
+  const lq=+document.getElementById('q3').value, q=10**lq, P=setup('c3');
+  const Ms=[], f=[]; for(let t=0;t<=lq;t+=lq/200){ const M=10**t; Ms.push(t); f.push(Math.log10(q/M+M)); }
+  axes(P,0,lq,0,lq+0.8,'vanishing order M (log scale: 1e0 = 1, 1e3 = 1000, ...)','size of the error bound (log scale)',v=>'1e'+v.toFixed(1),v=>'1e'+v.toFixed(1));
+  hline(P,lq,'trivial bound: q (no better than counting)',css('--muted'));
+  hline(P,Math.log10(2*Math.sqrt(q)),'Riemann Hypothesis size: 2√q',css('--good'));
+  line(P,Ms,f,css('--accent'),2.2);
+  const opt=lq/2; P.g.fillStyle=css('--accent2'); P.g.beginPath(); P.g.arc(P.X(opt),P.Y(Math.log10(2*Math.sqrt(q))),5,0,7); P.g.fill();
+  note(P,opt,Math.log10(2*Math.sqrt(q))+lq*0.12,'best choice: M = √q',css('--accent2'),'left');
+  note(P,lq*0.02,lq*0.72,'M too small: no gain',css('--fg'),'left');
+  note(P,lq*0.98,lq*0.72,'M too large: cost wins',css('--fg'),'right');
+  document.getElementById('q3v').textContent=`q = 1e${lq.toFixed(1)}: best M about ${Math.sqrt(q).toExponential(1)}, error about ${(2*Math.sqrt(q)).toExponential(1)} (trivial: ${q.toExponential(1)})`;
+}
+// 4: classes mod 16
+function draw4(){
+  const P=setup('c4'), X=NMAX, cls=[1,3,5,7,9,11,13,15], th=Object.fromEntries(cls.map(c=>[c,0])); let tot=0;
+  for(let p=3;p<=X;p+=2) if(sieve[p]){ th[p%16]+=Math.log(p); tot+=Math.log(p); }
+  const avg=tot/8, dev=cls.map(c=>th[c]-avg), m=Math.max(...dev.map(Math.abs))*1.2, s=Math.sqrt(X);
+  axes(P,0,8,-Math.max(m,s),Math.max(m,s),'residue class mod 16 (X = 1,000,000)',null,()=>'',v=>v.toFixed(0));
+  const g=P.g, bw=(P.X(1)-P.X(0))*0.6;
+  cls.forEach((c,i)=>{ const x=P.X(i+0.5)-bw/2, y0=P.Y(0), y1=P.Y(dev[i]); g.fillStyle=c%4==3?css('--accent2'):css('--accent');
+    g.fillRect(x,Math.min(y0,y1),bw,Math.abs(y1-y0)); g.fillStyle=css('--muted'); g.textAlign='center'; g.fillText(String(c),P.X(i+0.5),P.H-P.B+14); });
+  line(P,[0,8],[s,s],css('--muted'),1,[4,4]); line(P,[0,8],[-s,-s],css('--muted'),1,[4,4]);
+}
+// 5: lemniscate divisibility
+function draw5(){
+  const P=setup('c5'), n=LEM.n; axes(P,0,2001,0,1050,'n: which derivative of the lemniscatic sine','how many times p divides it',v=>v.toFixed(0),v=>v.toFixed(0));
+  const leg=(k,odd)=>{let s=0,pk=3,i=1; while(pk<=k){ if(!odd||i%2) s+=Math.floor(k/pk); pk*=3; i++; } return s;};
+  const fact=n.map(k=>leg(k,false)), lodd=n.map(k=>leg(k,true));
+  line(P,n,fact,css('--muted'),1.2,[5,4]); line(P,n,lodd,css('--muted'),4); line(P,n,LEM.v3,css('--accent2'),1.6); line(P,n,LEM.v5,css('--accent'),2);
+  note(P,1500,leg(1500,false),'power of 3 in n! (≈ n/2)',css('--muted'),'right');
+  note(P,1500,leg(1500,true)+60,'actual power of 3: ≈ 3n/8, on the prediction',css('--accent2'),'right');
+  note(P,1500,40,'split prime 5: stays at 0',css('--accent'),'right');
+}
+// 6: integer trade-off
+function draw6(){
+  const lx=+document.getElementById('x6').value, x=10**lx, d=9*0.01/8, P=setup('c6');
+  const e=m=>2*x/m+2+4*x**d*m+2*x**(0.5+d), ms=[], ys=[]; for(let t=0;t<=lx;t+=lx/200){ ms.push(t); ys.push(Math.log10(e(10**t))); }
+  axes(P,0,lx,0,lx+0.9,'chain length m: number of theta lifts (log scale)','size of the error (log scale)',v=>'1e'+v.toFixed(1),v=>'1e'+v.toFixed(1));
+  hline(P,Math.log10(2*x),'trivial bound: about x',css('--muted'));
+  hline(P,Math.log10(Math.sqrt(x)),'√x',css('--good'));
+  line(P,ms,ys,css('--accent'),2.2); const mo=Math.sqrt(x**(1-d)/2), eo=e(mo);
+  P.g.fillStyle=css('--accent2'); P.g.beginPath(); P.g.arc(P.X(Math.log10(mo)),P.Y(Math.log10(eo)),5,0,7); P.g.fill();
+  note(P,Math.log10(mo),Math.log10(eo)+lx*0.12,'best chain: m ≈ √x',css('--accent2'),'left');
+  document.getElementById('x6v').textContent=`x = 1e${lx.toFixed(1)}: best m about ${mo.toExponential(1)}, error about x^${(Math.log10(eo)/lx).toFixed(3)} (trivial: x^1)`;
+}
+// 7a: where the threshold comes from: x^(eps/8) against the constant 2o
+function draw7a(){
+  const eps=+document.getElementById('eps7').value, o=+document.getElementById('o7').value, P=setup('c7a');
+  const T=8*Math.log2(2*o)/eps, xmax=Math.max(500,T*1.6), c=Math.log2(2*o), ymax=Math.max(c*1.8,1.5);
+  axes(P,0,xmax,0,ymax,'size of x: number of binary digits (log₂ x)','log₂ of each quantity',v=>v.toFixed(0),v=>v.toFixed(1));
+  const g=P.g; g.save(); g.globalAlpha=0.13; g.fillStyle=css('--good'); g.fillRect(P.X(T),P.T,P.X(xmax)-P.X(T),P.H-P.T-P.B); g.restore();
+  hline(P,c,'constant 2o = '+(2*o),css('--accent2'));
+  line(P,[0,xmax],[0,eps/8*xmax],css('--accent'),2.2);
+  g.fillStyle=css('--accent2'); g.beginPath(); g.arc(P.X(T),P.Y(c),5,0,7); g.fill();
+  note(P,T,c*0.55,'threshold: x = 2^'+Math.ceil(T),css('--fg'),'left');
+  note(P,xmax*0.02,ymax*0.9,'not covered by this argument',css('--muted'),'left');
+  note(P,xmax*0.98,ymax*0.9,'bound certified',css('--good'),'right');
+  document.getElementById('eps7v').textContent=eps.toFixed(4);
+  document.getElementById('o7v').innerHTML=`${o}: threshold <math><mi>x</mi><mo>&#x2265;</mo><msup><mn>2</mn><mn>${Math.ceil(T)}</mn></msup></math>`;
+}
+// 7b: a zero off the line eventually breaks a bound that holds for all large y
+function draw7b(){
+  const beta=+document.getElementById('b7').value, eps=0.02, lc=1, off=-3, P=setup('c7b');
+  const gap=beta-0.5-eps, cross=gap>0?(lc-off)/gap:null, Lmax=cross?Math.min(1200,Math.max(40,cross*1.35)):120;
+  const bnd=L=>lc+(0.5+eps)*L, sw=L=>off+beta*L, ymax=Math.max(bnd(Lmax),sw(Lmax))*1.05;
+  axes(P,0,Lmax,off,ymax,'size of y: number of decimal digits (log₁₀ y)','size of the error (log₁₀)',v=>v.toFixed(0),v=>v.toFixed(0));
+  line(P,[0,Lmax],[bnd(0),bnd(Lmax)],css('--good'),2.2);
+  line(P,[0,Lmax],[sw(0),sw(Lmax)],css('--accent2'),2.2);
+  const st=document.getElementById('b7v');
+  if(cross){ const g=P.g; g.strokeStyle=css('--fg'); g.setLineDash([3,4]); g.beginPath(); g.moveTo(P.X(cross),P.T); g.lineTo(P.X(cross),P.H-P.B); g.stroke(); g.setLineDash([]);
+    note(P,cross,ymax*0.15,'bound broken from here on',css('--fg'),'left');
+    st.textContent=`${beta.toFixed(3)}: the swing overtakes the bound once y has about ${Math.round(cross)} digits, and keeps doing so for ever after`; }
+  else { note(P,Lmax*0.02,ymax*0.85,'zero inside the margin: take a smaller ε',css('--fg'),'left');
+    st.textContent=`${beta.toFixed(3)}: within ε of 1/2, so this ε cannot see it; a smaller ε would`; }
+}
+function drawAll(){ draw1(); draw2(); draw3(); draw4(); draw5(); draw6(); draw7a(); draw7b(); }
+['eps7','o7'].forEach(id=>document.getElementById(id).addEventListener('input',draw7a));
+document.getElementById('b7').addEventListener('input',draw7b);
+document.getElementById('q3').addEventListener('input',draw3);
+document.getElementById('x6').addEventListener('input',draw6);
+addEventListener('resize',drawAll);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',drawAll);
+drawAll();
+
+// ---------- narration ----------
+const paras=[...document.querySelectorAll('p.say')], st=document.getElementById('st'), playBtn=document.getElementById('play');
+let idx=0, playing=false, voice=null, gen=0;
+const synth=window.speechSynthesis;
+const sel=document.getElementById('voice');
+const score=v=>(/natural|neural|online/i.test(v.name)?0:2)+(/en-GB/i.test(v.lang)?0:1);
+function pickVoice(){
+  const all=(synth?synth.getVoices():[]).filter(v=>/^en/i.test(v.lang)).sort((a,b)=>score(a)-score(b)||a.name.localeCompare(b.name));
+  if(!all.length) return;
+  let saved=null; try{ saved=localStorage.getItem('tourVoice'); }catch(e){}
+  sel.innerHTML=''; all.forEach(v=>{ const o=document.createElement('option'); o.value=v.name;
+    o.textContent=v.name.replace(/^Microsoft /,'').replace(/ - English.*$/,'')+' ('+v.lang+')'+(/natural|neural|online/i.test(v.name)?' - natural':''); sel.appendChild(o); });
+  voice=all.find(v=>v.name===saved)||all[0]; sel.value=voice.name;
+}
+sel.addEventListener('change',()=>{ const v=synth.getVoices().find(x=>x.name===sel.value); if(!v) return; voice=v;
+  try{ localStorage.setItem('tourVoice',v.name); }catch(e){}
+  if(!playing){ synth.cancel(); const u=new SpeechSynthesisUtterance('This is the voice that will read the tour.'); u.voice=v; u.rate=+document.getElementById('rate').value; synth.speak(u); } });
+if(synth){ pickVoice(); synth.onvoiceschanged=pickVoice; } else { st.textContent='Speech not available in this browser'; playBtn.disabled=true; }
+function mark(i){ paras.forEach(p=>p.classList.remove('speaking')); document.querySelectorAll('section').forEach(s=>s.classList.remove('current'));
+  if(i<paras.length){ paras[i].classList.add('speaking'); const sec=paras[i].closest('section'); sec.classList.add('current');
+    paras[i].scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth', block:'center'});
+    st.textContent=`Paragraph ${i+1} of ${paras.length}`; } }
+function speak(i){
+  if(i>=paras.length){ playing=false; playBtn.textContent='Play narration'; st.textContent='Finished'; mark(paras.length); return; }
+  idx=i; mark(i); const my=++gen, u=new SpeechSynthesisUtterance(paras[i].dataset.say||paras[i].textContent);
+  if(voice) u.voice=voice; u.rate=+document.getElementById('rate').value;
+  u.onend=()=>{ if(playing && my===gen) speak(idx+1); };
+  synth.speak(u);
+}
+playBtn.onclick=()=>{ if(!synth) return;
+  if(playing){ playing=false; gen++; synth.cancel(); playBtn.textContent='Play narration'; st.textContent='Paused'; }
+  else { playing=true; playBtn.textContent='Pause'; gen++; synth.cancel(); speak(idx); } };
+function jump(d){ const secs=[...document.querySelectorAll('section')]; const cur=paras[Math.min(idx,paras.length-1)].closest('section');
+  const si=Math.max(0,Math.min(secs.length-1,secs.indexOf(cur)+d)); idx=paras.indexOf(secs[si].querySelector('p.say'));
+  if(playing){ gen++; synth.cancel(); setTimeout(()=>speak(idx),50); } else mark(idx); }
+document.getElementById('prev').onclick=()=>jump(-1);
+document.getElementById('next').onclick=()=>jump(1);
+</script>
+</body>
+</html>
